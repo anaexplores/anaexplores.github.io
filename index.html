@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Ana Do</title>
+  <meta name="description" content="Projects by Ana Do on AI agents, benchmarks and how far the numbers people quote about them can be trusted." />
+  <meta name="author" content="Ana Do" />
+  <link rel="canonical" href="https://anaexplores.github.io/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://anaexplores.github.io/" />
+  <meta property="og:title" content="Ana Do" />
+  <meta property="og:description" content="Projects by Ana Do on AI agents, benchmarks and how far the numbers people quote about them can be trusted." />
+  <meta property="og:image" content="https://anaexplores.github.io/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Ana Do. How sure can we be that a number means what it says?" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#0b0b0b" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f2f0eb" media="(prefers-color-scheme: light)" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%237c3aed'/%3E%3Cpath d='M30 76 50 22 70 76M37 58h26' fill='none' stroke='white' stroke-width='10' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+
+  <script>
+    try { var t = localStorage.getItem('theme'); if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+  </script>
+
+  <style>
+    /* ─── Reset ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    svg { display: block; }
+    button { font: inherit; cursor: pointer; }
+    a { color: inherit; }
+    ol, ul { list-style: none; }
+
+    /* ─── Design tokens ──────────────────────────── */
+    :root {
+      --bg:          #f2f0eb;
+      --bg-alt:      #eae8e2;
+      --bg-card:     #faf9f6;
+      --bg-card-h:   #f4f2ed;
+      --border:      #dedad3;
+      --border-h:    #cac6bc;
+      --text:        #1c1917;
+      --text-2:      #44403c;
+      --text-3:      #57534e;
+      --deco:        #a8a29e;
+      --accent:      #7c3aed;
+      --accent-h:    #6d28d9;
+      --accent-lit:  #6d28d9;
+      --accent-glow: rgba(124,58,237,.06);
+      --accent-ring: rgba(124,58,237,.22);
+      --live:        #166534;
+      --live-bg:     rgba(22,101,52,.08);
+      --live-bd:     rgba(22,101,52,.25);
+      --shadow:      0 1px 2px rgba(0,0,0,.04), 0 2px 8px rgba(0,0,0,.04);
+      --nav-bg:      rgba(242,240,235,.93);
+      --drawer-bg:   #faf9f6;
+      --grain-op:    0.018;
+      --hero-grid:   rgba(0,0,0,.03);
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg:          #0b0b0b;
+        --bg-alt:      #141414;
+        --bg-card:     #111111;
+        --bg-card-h:   #161616;
+        --border:      #1e1e1e;
+        --border-h:    #2d2d2d;
+        --text:        #e4e4e4;
+        --text-2:      #a3a3a3;
+        --text-3:      #8f8f8f;
+        --deco:        #3a3a3a;
+        --accent-lit:  #a78bfa;
+        --accent-glow: rgba(124,58,237,.18);
+        --accent-ring: rgba(124,58,237,.35);
+        --live:        #4ade80;
+        --live-bg:     rgba(34,197,94,.09);
+        --live-bd:     rgba(34,197,94,.2);
+        --shadow:      none;
+        --nav-bg:      rgba(11,11,11,.88);
+        --drawer-bg:   #0f0f0f;
+        --grain-op:    0.06;
+        --hero-grid:   rgba(255,255,255,.025);
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg:          #0b0b0b;
+      --bg-alt:      #141414;
+      --bg-card:     #111111;
+      --bg-card-h:   #161616;
+      --border:      #1e1e1e;
+      --border-h:    #2d2d2d;
+      --text:        #e4e4e4;
+      --text-2:      #a3a3a3;
+      --text-3:      #8f8f8f;
+      --deco:        #3a3a3a;
+      --accent-lit:  #a78bfa;
+      --accent-glow: rgba(124,58,237,.18);
+      --accent-ring: rgba(124,58,237,.35);
+      --live:        #4ade80;
+      --live-bg:     rgba(34,197,94,.09);
+      --live-bd:     rgba(34,197,94,.2);
+      --shadow:      none;
+      --nav-bg:      rgba(11,11,11,.88);
+      --drawer-bg:   #0f0f0f;
+      --grain-op:    0.06;
+      --hero-grid:   rgba(255,255,255,.025);
+      color-scheme: dark;
+    }
+
+    /* ─── Base ───────────────────────────────────── */
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    :root { --t: background-color .2s, border-color .2s, color .2s, box-shadow .2s; }
+
+    :focus-visible {
+      outline: 2px solid var(--accent-lit);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    .skip-link {
+      position: fixed; top: -100px; left: 16px; z-index: 9999;
+      background: var(--accent); color: #fff;
+      padding: 8px 16px; border-radius: 6px;
+      font-size: 13px; font-weight: 500; text-decoration: none;
+    }
+    .skip-link:focus { top: 16px; }
+
+    /* ─── Grain overlay ──────────────────────────── */
+    .grain {
+      position: fixed; inset: 0; z-index: 998; pointer-events: none;
+      width: 100%; height: 100%;
+      opacity: var(--grain-op);
+    }
+
+    /* ─── Nav ────────────────────────────────────── */
+    .nav {
+      position: sticky; top: 0; z-index: 200;
+      border-bottom: 1px solid var(--border);
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .nav-inner {
+      max-width: 960px; margin: 0 auto;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px;
+    }
+    .nav-logo {
+      font-weight: 700; font-size: 15px; letter-spacing: -.02em;
+      text-decoration: none; color: var(--text);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .nav-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 9px var(--accent);
+      flex-shrink: 0;
+    }
+    .nav-right { display: flex; align-items: center; gap: 4px; }
+    .nav-links { display: flex; align-items: center; gap: 1px; margin-right: 6px; }
+    .nav-link {
+      display: flex; align-items: center; gap: 6px;
+      padding: 5px 11px; border-radius: 7px;
+      font-size: 13px; font-weight: 500; text-decoration: none;
+      color: var(--text-2);
+      transition: var(--t);
+    }
+    .nav-link:hover { color: var(--text); background: var(--bg-alt); }
+
+    .icon-btn {
+      width: 34px; height: 34px; border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent; color: var(--text-2);
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--t);
+    }
+    .icon-btn[hidden] { display: none; }
+    .icon-btn:hover { border-color: var(--border-h); color: var(--text); background: var(--bg-card); }
+    .theme-toggle .ic-sun { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .theme-toggle .ic-sun { display: block; }
+      :root:not([data-theme="light"]) .theme-toggle .ic-moon { display: none; }
+    }
+    :root[data-theme="dark"] .theme-toggle .ic-sun { display: block; }
+    :root[data-theme="dark"] .theme-toggle .ic-moon { display: none; }
+
+    /* ─── Buttons ────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 20px; border-radius: 9px;
+      font-size: 13px; font-weight: 500; text-decoration: none;
+      border: 1px solid transparent; white-space: nowrap;
+      transition: transform .15s, background-color .15s, border-color .15s, color .15s, box-shadow .15s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-primary:hover { background: var(--accent-h); border-color: var(--accent-h); box-shadow: 0 4px 12px rgba(124,58,237,.3); }
+    .btn-ghost { background: transparent; color: var(--text-2); border-color: var(--border-h); }
+    .btn-ghost:hover { color: var(--text); background: var(--bg-card); }
+    .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 7px; }
+    @media (prefers-reduced-motion: no-preference) {
+      .btn-primary:hover { transform: translateY(-1px); }
+    }
+
+    /* ─── Hero ───────────────────────────────────── */
+    .hero {
+      position: relative; overflow: hidden;
+      padding: 112px 28px 96px;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(var(--hero-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--hero-grid) 1px, transparent 1px);
+      background-size: 52px 52px;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -80px; left: 50%; transform: translateX(-50%);
+      width: min(700px, 100%); height: 280px; border-radius: 50%;
+      background: var(--accent-glow); filter: blur(90px); pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 1; max-width: 904px; margin: 0 auto; }
+
+    .hero-kicker {
+      font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-3); margin-bottom: 22px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .hero-kicker::before { content: ''; width: 32px; height: 1px; background: var(--border-h); }
+
+    .hero h1 {
+      font-size: clamp(32px, 5.5vw, 54px);
+      font-weight: 700; letter-spacing: -.03em; line-height: 1.1;
+      max-width: 760px;
+      margin-bottom: 24px;
+    }
+    .hero h1 em { font-style: italic; font-weight: 400; color: var(--text-2); }
+
+    .hero-desc {
+      font-size: 16px; color: var(--text-2); max-width: 560px;
+      line-height: 1.75; margin-bottom: 32px;
+    }
+    .hero-cta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 36px; }
+
+    .hero-stats { display: flex; flex-wrap: wrap; gap: 10px; }
+    .stat-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px; border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg-alt);
+      font-size: 12px; color: var(--text-2);
+    }
+    .stat-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-lit); flex-shrink: 0; }
+
+    /* ─── Sections ───────────────────────────────── */
+    .section { max-width: 960px; margin: 0 auto; padding: 80px 28px; scroll-margin-top: 58px; }
+    .section-label {
+      font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-3); margin-bottom: 32px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .divider { border: none; border-top: 1px solid var(--border); }
+
+    /* ─── Projects ───────────────────────────────── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
+      gap: 14px;
+    }
+    .project-card {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 22px;
+      display: flex; flex-direction: column; gap: 12px;
+      box-shadow: var(--shadow);
+      position: relative; overflow: hidden;
+      transition: background-color .2s, border-color .2s, box-shadow .2s;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent 10%, var(--accent) 50%, transparent 90%);
+      opacity: 0; transition: opacity .3s;
+    }
+    .project-card:hover { background: var(--bg-card-h); border-color: var(--border-h); }
+    .project-card:hover::before, .project-card.active::before { opacity: 1; }
+    .project-card.active { border-color: var(--accent-ring); }
+
+    .card-head { display: flex; align-items: center; justify-content: space-between; }
+    .card-icon {
+      width: 36px; height: 36px; border-radius: 9px;
+      background: var(--accent-glow); border: 1px solid var(--accent-ring);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent-lit);
+    }
+    .badge {
+      font-size: 11px; padding: 2px 9px; border-radius: 20px; white-space: nowrap;
+      border: 1px solid var(--border-h); color: var(--text-2);
+    }
+    .badge-live { background: var(--live-bg); color: var(--live); border-color: var(--live-bd); }
+
+    .card-name { font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
+    .card-desc { font-size: 13px; color: var(--text-2); line-height: 1.7; flex: 1; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .tag {
+      padding: 2px 8px; border-radius: 4px;
+      font-size: 11px; color: var(--text-3);
+      background: var(--bg-alt); border: 1px solid var(--border);
+    }
+    .card-actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+
+    /* Details: inline without JS, drawer with JS */
+    .more summary {
+      list-style: none;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 12px; border-radius: 7px;
+      font-size: 12px; font-weight: 500;
+      color: var(--accent-lit); border: 1px solid var(--accent-ring);
+      cursor: pointer; transition: var(--t);
+    }
+    .more summary::-webkit-details-marker { display: none; }
+    .more summary:hover { background: var(--accent-glow); }
+    .more[open] summary { margin-bottom: 14px; }
+    .more-body { border-top: 1px solid var(--border); padding-top: 14px; }
+
+    .d-section + .d-section { margin-top: 16px; }
+    .d-label {
+      font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-3); margin-bottom: 6px;
+    }
+    .d-section p { font-size: 13px; color: var(--text-2); line-height: 1.75; }
+
+    /* ─── Method ─────────────────────────────────── */
+    .method-text { max-width: 620px; color: var(--text-2); font-size: 16px; line-height: 1.8; }
+    .process {
+      margin-top: 32px;
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      border: 1px solid var(--border); border-radius: 10px;
+      overflow: hidden; background: var(--bg-card);
+    }
+    .process-step { padding: 14px 16px; border-right: 1px solid var(--border); }
+    .process-step:last-child { border-right: none; }
+    .process-step-num { color: var(--accent-lit); font-size: 11px; margin-bottom: 4px; font-variant-numeric: tabular-nums; }
+    .process-step-name { color: var(--text); font-size: 13px; font-weight: 500; line-height: 1.4; }
+
+    /* ─── Footer ─────────────────────────────────── */
+    .footer {
+      max-width: 960px; margin: 0 auto; padding: 22px 28px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 8px;
+      font-size: 12px; color: var(--text-3);
+    }
+    .footer a { color: var(--text-2); text-decoration: none; }
+    .footer a:hover { color: var(--text); text-decoration: underline; }
+
+    /* ─── Drawer (JS only) ───────────────────────── */
+    .drawer {
+      position: fixed; inset: 0 0 0 auto;
+      width: min(480px, 100vw); max-width: 100vw; height: 100%; max-height: 100%;
+      margin: 0 0 0 auto; padding: 0;
+      border: none; border-left: 1px solid var(--border);
+      background: var(--drawer-bg); color: var(--text);
+    }
+    .drawer::backdrop { background: rgba(0,0,0,.6); backdrop-filter: blur(3px); }
+    @media (prefers-reduced-motion: no-preference) {
+      .drawer[open] { animation: slide-in .32s cubic-bezier(.4,0,.2,1); }
+      @keyframes slide-in { from { transform: translateX(100%); } to { transform: none; } }
+    }
+    .drawer-inner { display: flex; flex-direction: column; height: 100%; }
+    .drawer-head {
+      display: flex; align-items: center; justify-content: flex-end;
+      padding: 14px 20px; border-bottom: 1px solid var(--border);
+    }
+    .drawer-body { flex: 1; overflow-y: auto; padding: 26px 24px 44px; }
+    .d-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: var(--accent-glow); border: 1px solid var(--accent-ring);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent-lit); margin-bottom: 16px;
+    }
+    .d-title { font-size: 22px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 8px; }
+    .d-sub { font-size: 14px; color: var(--text-2); line-height: 1.7; margin-bottom: 18px; }
+    .d-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+    .drawer .d-section + .d-section { margin-top: 22px; }
+    .drawer .d-section p { font-size: 14px; }
+
+    /* ─── Responsive ─────────────────────────────── */
+    @media (max-width: 768px) {
+      .section { padding: 60px 20px; }
+      .hero { padding: 80px 20px 72px; }
+      .nav-inner { padding: 0 20px; }
+      .footer { padding: 20px; }
+      .process { grid-template-columns: 1fr; }
+      .process-step { border-right: none; border-bottom: 1px solid var(--border); display: flex; gap: 14px; align-items: baseline; }
+      .process-step:last-child { border-bottom: none; }
+    }
+    @media (max-width: 560px) {
+      .nav-links .nav-anchor { display: none; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .hero { padding: 64px 16px 64px; }
+      .section { padding: 52px 16px; }
+      .nav-inner { padding: 0 16px; }
+      .footer { padding: 20px 16px; }
+    }
+
+    @media print {
+      .nav, .grain, .drawer { display: none !important; }
+      body { background: #fff; color: #000; }
+      .more-body { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+<svg class="grain" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <filter id="grain-f">
+    <feTurbulence type="fractalNoise" baseFrequency="0.78" numOctaves="4" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#grain-f)"/>
+</svg>
+
+<svg aria-hidden="true" style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  </symbol>
+  <symbol id="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </symbol>
+  <symbol id="ic-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+  </symbol>
+  <symbol id="ic-arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+  </symbol>
+  <symbol id="ic-ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+  </symbol>
+  <symbol id="ic-more" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="14" y2="17"/>
+  </symbol>
+  <symbol id="ic-gh" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+  </symbol>
+  <!-- Project icons -->
+  <symbol id="ic-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 18a9 9 0 1 1 18 0"/><line x1="12" y1="18" x2="16.5" y2="10.5"/><line x1="3" y1="18" x2="21" y2="18"/>
+  </symbol>
+  <symbol id="ic-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="12" y1="3" x2="12" y2="21"/><line x1="5" y1="7" x2="19" y2="7"/><path d="M5 7 2 14a3 3 0 0 0 6 0z"/><path d="M19 7l-3 7a3 3 0 0 0 6 0z"/><line x1="8" y1="21" x2="16" y2="21"/>
+  </symbol>
+  <symbol id="ic-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="7.5" cy="15.5" r="4.5"/><line x1="10.7" y1="12.3" x2="21" y2="2"/><line x1="16" y1="7" x2="19" y2="10"/><line x1="18.5" y1="4.5" x2="21" y2="7"/>
+  </symbol>
+</svg>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav class="nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="#main" class="nav-logo">
+      <span class="nav-dot" aria-hidden="true"></span>
+      Ana Do
+    </a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li class="nav-anchor"><a href="#projects" class="nav-link">Projects</a></li>
+        <li class="nav-anchor"><a href="#method" class="nav-link">How I work</a></li>
+        <li><a href="https://github.com/anaexplores" class="nav-link">
+          <svg width="14" height="14" aria-hidden="true"><use href="#ic-gh"/></svg>GitHub</a></li>
+      </ul>
+      <button class="icon-btn theme-toggle" id="themeToggle" type="button" aria-label="Switch theme" title="Switch theme" hidden>
+        <svg class="ic-moon" width="15" height="15" aria-hidden="true"><use href="#ic-moon"/></svg>
+        <svg class="ic-sun" width="15" height="15" aria-hidden="true"><use href="#ic-sun"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+  <section class="hero" aria-labelledby="hero-h">
+    <div class="hero-inner">
+      <p class="hero-kicker">AI evaluation research</p>
+      <h1 id="hero-h">How sure can we be that a number <em>means what it says?</em></h1>
+      <p class="hero-desc">
+        Hi, I'm Ana 👋 I came to AI from psychology, and I keep asking the question I learned there.
+        Today I ask it about AI agents, benchmarks and the numbers people quote about them.
+        I build these tools myself, from the first idea to a working site.
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">
+          See the work
+          <svg width="13" height="13" aria-hidden="true"><use href="#ic-arr"/></svg>
+        </a>
+        <a href="https://github.com/anaexplores" class="btn btn-ghost">
+          <svg width="13" height="13" aria-hidden="true"><use href="#ic-gh"/></svg>
+          GitHub
+        </a>
+      </div>
+      <ul class="hero-stats" aria-label="Quick facts">
+        <li class="stat-pill"><span class="stat-dot" aria-hidden="true"></span>131,332 agent runs analysed</li>
+        <li class="stat-pill"><span class="stat-dot" aria-hidden="true"></span>3 public projects</li>
+        <li class="stat-pill"><span class="stat-dot" aria-hidden="true"></span>Every figure traced to its source</li>
+      </ul>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="section" id="projects" aria-labelledby="projects-h">
+    <h2 class="section-label" id="projects-h">Projects</h2>
+    <ul class="projects-grid">
+
+      <li class="project-card">
+        <div class="card-head">
+          <div class="card-icon" aria-hidden="true"><svg width="18" height="18"><use href="#ic-gauge"/></svg></div>
+          <span class="badge badge-live">live</span>
+        </div>
+        <h3 class="card-name">Agent Reliability Calculator</h3>
+        <p class="card-desc">Shows why adding more verifiers stops helping after a point and why retrying an agent buys less than the usual formula promises. The defaults come from 131,332 real agent runs on four public benchmarks.</p>
+        <div class="card-tags"><span class="tag">browser tool</span><span class="tag">4 public benchmarks</span></div>
+        <div class="card-actions">
+          <a class="btn btn-primary btn-sm" href="https://anaexplores.github.io/agent-reliability-calculator/">
+            <svg width="12" height="12" aria-hidden="true"><use href="#ic-ext"/></svg>Live</a>
+          <a class="btn btn-ghost btn-sm" href="https://github.com/anaexplores/agent-reliability-calculator">
+            <svg width="12" height="12" aria-hidden="true"><use href="#ic-gh"/></svg>Repo</a>
+        </div>
+        <details class="more">
+          <summary><svg width="12" height="12" aria-hidden="true"><use href="#ic-more"/></svg>Details</summary>
+          <div class="more-body">
+            <div class="d-section">
+              <h4 class="d-label">What it does</h4>
+              <p>It has four blocks. The first shows the reliability ceiling of a chain of steps with verifiers. The second compares naive retries with real ones. The third compares strategies by total cost. The fourth measures the repeat correlation (ICC) from your own CSV in the browser, and the file is never uploaded.</p>
+            </div>
+            <div class="d-section">
+              <h4 class="d-label">What the data says</h4>
+              <p>Retries of the same agent on the same task are strongly correlated, with a median ICC of 0.49 to 0.67 across the corpora. A model fit on part of the data predicts the rest within 0.3 to 1.5 points, while the independence formula misses by 14 to 58.</p>
+            </div>
+            <div class="d-section">
+              <h4 class="d-label">Honest limits</h4>
+              <p>ICC is not a universal constant. Across domains and models it ranges from 0.03 to 0.83, which is why you can measure your own.</p>
+            </div>
+          </div>
+        </details>
+      </li>
+
+      <li class="project-card">
+        <div class="card-head">
+          <div class="card-icon" aria-hidden="true"><svg width="18" height="18"><use href="#ic-scale"/></svg></div>
+          <span class="badge">study</span>
+        </div>
+        <h3 class="card-name">Honest agent scores</h3>
+        <p class="card-desc">Asks whether broken benchmark tasks or repeated runs change which AI agent comes out on top. On 3,300 Terminal-Bench 4.0 runs the answer was mostly no. Broken tasks can still make agents look different in reliability when they are not.</p>
+        <div class="card-tags"><span class="tag">reproducible</span><span class="tag">Terminal-Bench 4.0</span></div>
+        <div class="card-actions">
+          <a class="btn btn-ghost btn-sm" href="https://github.com/anaexplores/honest-agent-scores">
+            <svg width="12" height="12" aria-hidden="true"><use href="#ic-gh"/></svg>Repo</a>
+        </div>
+        <details class="more">
+          <summary><svg width="12" height="12" aria-hidden="true"><use href="#ic-more"/></svg>Details</summary>
+          <div class="more-body">
+            <div class="d-section">
+              <h4 class="d-label">What it checks</h4>
+              <p>Two common claims in AI agent evaluation. One is that benchmark defects hide the true leader, the other is that ranking by reliability on repeats (pass^5) reorders agents. The data are public per-trial results for 10 configurations on 66 tasks with 5 trials each.</p>
+            </div>
+            <div class="d-section">
+              <h4 class="d-label">What the data says</h4>
+              <p>Neither change moves the leader beyond noise. Broken tasks can create false differences in reliability between agents. With 66 tasks, two agents within about 10 points of each other are not reliably ordered, and about 500 tasks are needed to resolve 5 points.</p>
+            </div>
+            <div class="d-section">
+              <h4 class="d-label">Honest limits</h4>
+              <p>The test has low power against a shift of one or two places. The analysis plan was written before each analysis, and exploratory results are reported separately. A small tool runs the same checks on your own leaderboard.</p>
+            </div>
+          </div>
+        </details>
+      </li>
+
+      <li class="project-card">
+        <div class="card-head">
+          <div class="card-icon" aria-hidden="true"><svg width="18" height="18"><use href="#ic-key"/></svg></div>
+          <span class="badge badge-live">live</span>
+        </div>
+        <h3 class="card-name">The Signature Explorer</h3>
+        <p class="card-desc">Explains digital signatures from the one in your crypto wallet to the post-quantum ones. You can sign a message, break it and even forge a signature yourself. Every fact on the page links to its original source.</p>
+        <div class="card-tags"><span class="tag">interactive explainer</span><span class="tag">post-quantum</span></div>
+        <div class="card-actions">
+          <a class="btn btn-primary btn-sm" href="https://anaexplores.github.io/the-signature-explorer/">
+            <svg width="12" height="12" aria-hidden="true"><use href="#ic-ext"/></svg>Live</a>
+          <a class="btn btn-ghost btn-sm" href="https://github.com/anaexplores/the-signature-explorer">
+            <svg width="12" height="12" aria-hidden="true"><use href="#ic-gh"/></svg>Repo</a>
+        </div>
+        <details class="more">
+          <summary><svg width="12" height="12" aria-hidden="true"><use href="#ic-more"/></svg>Details</summary>
+          <div class="more-body">
+            <div class="d-section">
+              <h4 class="d-label">What you can do</h4>
+              <p>Sign a message, tamper with it and watch verification fail. Reuse an ECDSA nonce on purpose and recover the private key from two signatures. Sign twice with one Lamport key and forge a message nobody signed, checked by the real verifier.</p>
+            </div>
+            <div class="d-section">
+              <h4 class="d-label">Where it goes</h4>
+              <p>From there it follows the hash-based path through XMSS and FORS to SLH-DSA, standardised as FIPS 205. It runs entirely in the browser with no backend, and there are exercises for teachers.</p>
+            </div>
+            <div class="d-section">
+              <h4 class="d-label">Honest limits</h4>
+              <p>An exercise completion code proves that a valid solution exists for that seed, not who produced it. The exercises are meant for practice, not proctored assessment.</p>
+            </div>
+          </div>
+        </details>
+      </li>
+
+    </ul>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="section" id="method" aria-labelledby="method-h">
+    <h2 class="section-label" id="method-h">How I work</h2>
+    <p class="method-text">I write down the analysis plan before I run the numbers. If the result is negative, I publish it anyway. Every figure in my projects can be traced back to where it came from.</p>
+    <ol class="process">
+      <li class="process-step"><div class="process-step-num">01</div><div class="process-step-name">Ask the question</div></li>
+      <li class="process-step"><div class="process-step-num">02</div><div class="process-step-name">Write the plan first</div></li>
+      <li class="process-step"><div class="process-step-num">03</div><div class="process-step-name">Measure on public data</div></li>
+      <li class="process-step"><div class="process-step-num">04</div><div class="process-step-name">Try to break it</div></li>
+      <li class="process-step"><div class="process-step-num">05</div><div class="process-step-name">Publish, even if negative</div></li>
+    </ol>
+  </section>
+
+</main>
+
+<hr class="divider" />
+<footer class="footer">
+  <span>© 2026 Ana Do</span>
+  <a href="https://github.com/anaexplores">GitHub</a>
+</footer>
+
+<dialog class="drawer" id="drawer" aria-labelledby="drawerTitle">
+  <div class="drawer-inner">
+    <div class="drawer-head">
+      <button class="icon-btn" id="drawerClose" type="button" aria-label="Close">
+        <svg width="15" height="15" aria-hidden="true"><use href="#ic-x"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+  </div>
+</dialog>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+
+    // Theme: system by default, manual choice remembered when storage works
+    var KEY = 'theme';
+    function isDark() {
+      var t = root.getAttribute('data-theme');
+      if (t) return t === 'dark';
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    var toggle = document.getElementById('themeToggle');
+    toggle.hidden = false;
+    toggle.addEventListener('click', function () {
+      var next = isDark() ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem(KEY, next); } catch (e) {}
+    });
+
+    // Drawer: the same Details content in a side panel
+    var drawer = document.getElementById('drawer');
+    if (typeof drawer.showModal !== 'function') return;
+    var body = document.getElementById('drawerBody');
+    var active = null;
+
+    function open(card) {
+      body.innerHTML = '';
+      var ic = card.querySelector('.card-icon').cloneNode(true);
+      ic.className = 'd-icon';
+      body.appendChild(ic);
+      var title = document.createElement('h2');
+      title.className = 'd-title';
+      title.id = 'drawerTitle';
+      title.textContent = card.querySelector('.card-name').textContent;
+      body.appendChild(title);
+      var sub = document.createElement('p');
+      sub.className = 'd-sub';
+      sub.textContent = card.querySelector('.card-desc').textContent;
+      body.appendChild(sub);
+      var actions = card.querySelector('.card-actions').cloneNode(true);
+      actions.className = 'd-actions';
+      body.appendChild(actions);
+      body.appendChild(card.querySelector('.more-body').cloneNode(true)).className = '';
+      active = card;
+      card.classList.add('active');
+      drawer.showModal();
+    }
+
+    document.querySelectorAll('.project-card .more summary').forEach(function (s) {
+      s.addEventListener('click', function (e) {
+        e.preventDefault();
+        open(s.closest('.project-card'));
+      });
+    });
+    document.getElementById('drawerClose').addEventListener('click', function () { drawer.close(); });
+    drawer.addEventListener('click', function (e) { if (e.target === drawer) drawer.close(); });
+    drawer.addEventListener('close', function () {
+      if (active) {
+        active.classList.remove('active');
+        active.querySelector('.more summary').focus();
+        active = null;
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>
