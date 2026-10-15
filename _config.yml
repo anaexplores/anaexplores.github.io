@@ -1,0 +1,33 @@
+title: Ana Do
+description: Notes on AI agents, benchmarks and how far the numbers people quote about them can be trusted.
+url: "https://anaexplores.github.io"
+baseurl: ""
+author: Ana Do
+lang: en
+timezone: UTC
+
+permalink: /writing/:year/:title/
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+plugins:
+  - jekyll-feed
+
+feed:
+  path: feed.xml
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+
+exclude:
+  - .claude
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor

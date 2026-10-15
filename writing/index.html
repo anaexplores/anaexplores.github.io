@@ -1,0 +1,20 @@
+---
+layout: default
+title: Writing
+description: Notes on AI agents, benchmarks and how far the numbers people quote about them can be trusted.
+---
+<h1 class="page-title">Writing</h1>
+<p class="page-lead">Short pieces about what the numbers around AI agents actually measure. Each one comes with code and data you can rerun.</p>
+{% if site.posts.size == 0 %}
+<p class="post-meta">First piece coming soon.</p>
+{% else %}
+<ul class="post-list">
+{% for post in site.posts %}
+  <li>
+    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+    <div class="post-meta"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%-d %B %Y" }}</time></div>
+    {% if post.description %}<p>{{ post.description }}</p>{% endif %}
+  </li>
+{% endfor %}
+</ul>
+{% endif %}
